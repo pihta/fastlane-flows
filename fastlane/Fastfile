@@ -60,7 +60,11 @@ def rds_rambnroll_upload(options)
   faraday.request :url_encoded
   faraday.adapter :net_http
   end
-
+  puts "PROJECT_NAME"
+  puts project_name
+  puts "FOLDER"
+  puts folder
+  puts ipa_path
   payload = { :project => project_name, 
             :folder => folder,   
             :build => Faraday::UploadIO.new(ipa_path, 'application/zip') }
