@@ -42,10 +42,30 @@ lane :in_house do |options|
   setting_app_options(options)
 
   # Switching to ftp lane
-  ftp(options)
+  rds_rambnroll_upload(options)
 
   # Setting output message
   @result = "#{@name} #{current_version}.#{current_build} (in-house) uploaded to FTP \nhttps://appdistribution.rambler.ru/dev/index.html"
+end
+
+def rds_rambnroll_upload(options)
+  require 'Faraday'
+
+  project_name = options[:app_name]
+  folder = options[:branch]
+  ipa_path = lane_context[SharedValues::IPA_OUTPUT_PATH]
+
+  conn = Faraday.new(:url => 'https://appdistribution.rambler.ru') do |faraday|
+  faraday.request :multipart
+  faraday.request :url_encoded
+  faraday.adapter :net_http
+  end
+
+  payload = { :project => project_name, 
+            :folder => folder,   
+            :build => Faraday::UploadIO.new(ipa_path, 'application/zip') }
+
+  conn.post('/builds/webhook_upload', payload)
 end
 
 desc "Submit a new nightly build from develop branch to FTP"
