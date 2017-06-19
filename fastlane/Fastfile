@@ -354,17 +354,38 @@ def ftp(options)
   ftp_path = options[:ftp_path]
   build_version = "#{options[:version_number]}.#{options[:current_build]}"
 
-	rds_ftp_deploy(ipa_path: ipa_path,
-                app_identifier: options[:app_identifier],
-                name: options[:app_name],
-                build_version: build_version,
-                baseurl: baseurl,
-                ftp_path: ftp_path,
-                ftp_host: ENV['FTP_HOST'],
-                ftp_port: ENV['FTP_PORT'],
-                ftp_user: ENV['FTP_USER'],
-                ftp_password: ENV['FTP_PASSWORD']
-  )
+	# rds_ftp_deploy(ipa_path: ipa_path,
+ #                app_identifier: options[:app_identifier],
+ #                name: options[:app_name],
+ #                build_version: build_version,
+ #                baseurl: baseurl,
+ #                ftp_path: ftp_path,
+ #                ftp_host: ENV['FTP_HOST'],
+ #                ftp_port: ENV['FTP_PORT'],
+ #                ftp_user: ENV['FTP_USER'],
+ #                ftp_password: ENV['FTP_PASSWORD']
+ #  )
+  rds_rambnroll_upload(options)
+end
+
+def rds_rambnroll_upload(options)
+  require 'Faraday'
+
+  project_name = options[:app_name]
+  folder = options[:branch]
+  ipa_path = lane_context[SharedValues::IPA_OUTPUT_PATH]
+
+  conn = Faraday.new(:url => 'https://appdistribution.rambler.ru') do |faraday|
+  faraday.request :multipart
+  faraday.request :url_encoded
+  faraday.adapter :net_http
+  end
+
+  payload = { :project => project_name, 
+            :folder => folder,   
+            :build => Faraday::UploadIO.new(ipa_path, 'application/zip') }
+
+  conn.post('/builds/webhook_upload', payload)
 end
 
 def testflight(options)
