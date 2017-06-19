@@ -42,6 +42,7 @@ lane :in_house do |options|
   setting_app_options(options)
 
   # Switching to ftp lane
+  options[:ipa_path] = lane_context[SharedValues::IPA_OUTPUT_PATH]
   rds_rambnroll_upload(options)
 
   # Setting output message
@@ -52,7 +53,7 @@ def rds_rambnroll_upload(options)
 
   project_name = options[:app_name]
   folder = options[:branch]
-  ipa_path = lane_context[SharedValues::IPA_OUTPUT_PATH]
+  ipa_path = options[:ipa_path]
 
   conn = Faraday.new(:url => 'https://appdistribution.rambler.ru') do |faraday|
   faraday.request :multipart
@@ -63,6 +64,7 @@ def rds_rambnroll_upload(options)
   puts project_name
   puts "FOLDER"
   puts folder
+  puts "IPA_PATH"
   puts ipa_path
   payload = { :project => project_name, 
             :folder => folder,   
