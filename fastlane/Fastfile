@@ -49,7 +49,6 @@ lane :in_house do |options|
 end
 
 def rds_rambnroll_upload(options)
-  require 'Faraday'
 
   project_name = options[:app_name]
   folder = options[:branch]
