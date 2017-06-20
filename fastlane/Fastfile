@@ -42,7 +42,7 @@ lane :in_house do |options|
   setting_app_options(options)
 
   # Switching to ftp lane
-  ftp(options)
+  rambnroll(options)
 
   # Setting output message
   @result = "#{@name} #{current_version}.#{current_build} (in-house) uploaded to FTP \nhttps://appdistribution.rambler.ru/dev/index.html"
@@ -55,18 +55,14 @@ def rds_rambnroll_upload(options)
   ipa_path = lane_context[SharedValues::IPA_OUTPUT_PATH]
 
   conn = Faraday.new(:url => 'https://appdistribution.rambler.ru') do |faraday|
-  faraday.request :multipart
-  faraday.request :url_encoded
-  faraday.adapter :net_http
+    faraday.request :multipart
+    faraday.request :url_encoded
+    faraday.adapter :net_http
   end
-  puts "PROJECT_NAME"
-  puts project_name
-  puts "FOLDER"
-  puts folder
-  puts ipa_path
+
   payload = { :project => project_name, 
-            :folder => folder,   
-            :build => Faraday::UploadIO.new(ipa_path, 'application/zip') }
+              :folder => folder,   
+              :build => Faraday::UploadIO.new(ipa_path, 'application/zip') }
 
   conn.post('/builds/webhook_upload', payload)
 end
@@ -119,7 +115,7 @@ lane :nightly do |options|
 
   # Switching to ftp lane only if there were any changes
   unless changelog_empty
-    ftp(options)
+    rambnroll(options)
 
     # Setting output message
     @result = "#{@name} #{current_version}.#{current_build} (nightly) uploaded to FTP \nhttps://appdistribution.rambler.ru/nightly/index.html"
@@ -224,7 +220,7 @@ end
 ######################### PRIVATE LANES #########################
 
 desc "Prepares ipa file and uploads it to RDS FTP server"
-private_lane :ftp do |options|
+private_lane :rambnroll do |options|
   # Variables declaration
   branch = options[:branch]
   @name = ENV['APP_NAME']
@@ -238,7 +234,7 @@ private_lane :ftp do |options|
   git_checkout(remote_branch: branch)
 
   # Build, Sigh and Upload
-  ftp_build_and_upload(options)
+  rambnroll_build_and_upload(options)
 
   # Setup Oclint
   if options[:oclint]
@@ -267,7 +263,7 @@ private_lane :ftp do |options|
 end
 
 desc "Prepares the build and uploads it to Fabric"
-private_lane :ftp_build_and_upload do |options|
+private_lane :rambnroll_build_and_upload do |options|
   # Disable Apple Pay
   rds_disable_apple_pay(
     xcodeproj: ENV['XCODEPROJ_NAME'],
@@ -299,18 +295,15 @@ private_lane :ftp_build_and_upload do |options|
     xcpretty_report_json: compile_commands_json_file_path
   )
 
-  # Uploading to FTP
-  ipa_path = lane_context[SharedValues::IPA_OUTPUT_PATH]
-  baseurl = ENV['DEPLOY_BASEURL']
-  ftp_path = options[:ftp_path]
-
   version_number = options[:version_number]
   current_build = get_info_plist_value(
     path: get_info_plist_path(),
     key: 'CFBundleVersion'
   )
-
-  rds_rambnroll_upload(options)
+  ipa_path = lane_context[SharedValues::IPA_OUTPUT_PATH]
+  rambnroll_uploat( app_name: options[:app_name],
+                    branch: options[:branch],
+                    ipa_path: ipa_path)
 end
 
 desc "Prepares the build and uploads it to Fabric"
