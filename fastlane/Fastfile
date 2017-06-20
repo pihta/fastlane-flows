@@ -48,25 +48,6 @@ lane :in_house do |options|
   @result = "#{@name} #{current_version}.#{current_build} (in-house) uploaded to FTP \nhttps://appdistribution.rambler.ru/dev/index.html"
 end
 
-def rds_rambnroll_upload(options)
-
-  project_name = options[:app_name]
-  folder = options[:branch]
-  ipa_path = lane_context[SharedValues::IPA_OUTPUT_PATH]
-
-  conn = Faraday.new(:url => 'https://appdistribution.rambler.ru') do |faraday|
-    faraday.request :multipart
-    faraday.request :url_encoded
-    faraday.adapter :net_http
-  end
-
-  payload = { :project => project_name, 
-              :folder => folder,   
-              :build => Faraday::UploadIO.new(ipa_path, 'application/zip') }
-
-  conn.post('/builds/webhook_upload', payload)
-end
-
 desc "Submit a new nightly build from develop branch to FTP"
 lane :nightly do |options|
   # Little hack: deleting all local tags to avoid problems with tag 'nightly/latest'
@@ -301,7 +282,7 @@ private_lane :rambnroll_build_and_upload do |options|
     key: 'CFBundleVersion'
   )
   ipa_path = lane_context[SharedValues::IPA_OUTPUT_PATH]
-  rambnroll_uploat( app_name: options[:app_name],
+  rambnroll_upload( app_name: options[:app_name],
                     branch: options[:branch],
                     ipa_path: ipa_path)
 end
