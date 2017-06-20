@@ -1,6 +1,6 @@
 module Fastlane
   module Actions
-    class RambnrollUpload < Action
+    class RambnrollUploadAction < Action
       def self.run(params)
         project_name = params[:app_name]
         folder = params[:branch]
