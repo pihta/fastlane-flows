@@ -42,7 +42,7 @@ lane :in_house do |options|
   setting_app_options(options)
 
   # Switching to ftp lane
-  rds_rambnroll_upload(options)
+  ftp(options)
 
   # Setting output message
   @result = "#{@name} #{current_version}.#{current_build} (in-house) uploaded to FTP \nhttps://appdistribution.rambler.ru/dev/index.html"
