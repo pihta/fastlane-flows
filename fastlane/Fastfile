@@ -93,7 +93,6 @@ lane :nightly do |options|
   month = Date.today.month
   year = Date.today.year
   day = Date.today.day
-  current_tag = "nightly/#{year}/#{month}/#{day}"
   options[:tags] = ['nightly/latest', current_tag]
   puts(current_tag)
 
@@ -311,17 +310,7 @@ private_lane :ftp_build_and_upload do |options|
     key: 'CFBundleVersion'
   )
 
-  rds_ftp_deploy(ipa_path: ipa_path,
-                  app_identifier: main_app_identifier(options),
-                  name: @name,
-                  build_version: "#{version_number}.#{current_build}",
-                  baseurl: baseurl,
-                  ftp_path: ftp_path,
-                  ftp_host: ENV['FTP_HOST'],
-                  ftp_port: ENV['FTP_PORT'],
-                  ftp_user: ENV['FTP_USER'],
-                  ftp_password: ENV['FTP_PASSWORD']
-  )
+  rds_rambnroll_upload(options)
 end
 
 desc "Prepares the build and uploads it to Fabric"
