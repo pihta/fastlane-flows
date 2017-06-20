@@ -252,7 +252,7 @@ private_lane :rambnroll do |options|
 
   # Adding git tags
   tags = options[:tags]
-  multiple_tags(tags: tags)
+  # multiple_tags(tags: tags)
 
   # Some cleaning
   clean_build_artifacts
