@@ -209,7 +209,7 @@ private_lane :rambnroll do |options|
   @result = ''
 
   # Reset and clean working copy if needed
-  git_reset unless options[:skip_reset]
+  # git_reset unless options[:skip_reset]
 
   # Checking out the passed branch
   git_checkout(remote_branch: branch)

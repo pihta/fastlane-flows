@@ -7,7 +7,6 @@ module Fastlane
       OCLINT_ASSETS_DIRECTORY_PATH = 'fastlane/assets/oclint'
       OCLINT_CONFIG_FILE = 'oclint_config.yml'
       OCLINT_REPORT_TEMPLATE_FILE = 'oclint_html_report_template.html'
-
       def self.run(params)
         UI.message "Starting OCLint action"
 
