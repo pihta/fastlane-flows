@@ -23,6 +23,13 @@ module Fastlane
         conn.post('/builds/webhook_upload', payload)
         UI.message "Successfully uploaded to Rambnroll 🎉"
       end
+      def self.available_options
+        [
+          FastlaneCore::ConfigItem.new(app_name: :version,
+                                       branch: :branch,
+                                       ipa_path: :ipa_path)
+        ]
+      end
 
       def self.description
         'Upload build to Rambnroll'
