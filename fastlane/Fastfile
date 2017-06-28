@@ -259,7 +259,7 @@ private_lane :rambnroll_build_and_upload do |options|
   # Setting up the icon badge
   shield_text = options[:shield_text]
   shield_data = "#{shield_text}-blue"
-  # badge(shield: shield_data, dark: true)
+  badge(shield: shield_data, dark: true)
 
   # Create oclint tmp directory
   FileUtils.rm_rf(compile_commands_json_file_path)
@@ -283,7 +283,7 @@ private_lane :rambnroll_build_and_upload do |options|
     key: 'CFBundleVersion'
   )
   ipa_path = lane_context[SharedValues::IPA_OUTPUT_PATH]
-  
+
   rambnroll_upload(
     app_name: options[:app_name],
     branch: options[:branch],
