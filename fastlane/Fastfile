@@ -35,20 +35,17 @@ lane :in_house do |options|
   shield_text = "inhouse-#{year}.#{month}.#{day}"
   options[:shield_text] = shield_text
 
-  # Setting up the folder for FTP upload
-  options[:ftp_path] = 'dev'
-
   # Setting up app options
   setting_app_options(options)
 
-  # Switching to ftp lane
+  # Switching to rambnroll lane
   rambnroll(options)
 
   # Setting output message
-  @result = "#{@name} #{current_version}.#{current_build} (in-house) uploaded to FTP \nhttps://appdistribution.rambler.ru/dev/index.html"
+  @result = "#{@name} #{current_version}.#{current_build} (in-house) uploaded to rambnroll \nhttps://appdistribution.rambler.ru"
 end
 
-desc "Submit a new nightly build from develop branch to FTP"
+desc "Submit a new nightly build from develop branch to rambnroll"
 lane :nightly do |options|
   # Little hack: deleting all local tags to avoid problems with tag 'nightly/latest'
   sh("git tag | xargs git tag -d")
@@ -85,21 +82,18 @@ lane :nightly do |options|
   shield_text = "nightly-#{year}.#{month}.#{day}"
   options[:shield_text] = shield_text
 
-  # Setting up the folder for FTP upload
-  options[:ftp_path] = 'nightly'
-
   # Setting up the oclint
   options[:oclint] = true if options[:oclint] == nil
 
   # Setting up app options
   setting_app_options(options)
 
-  # Switching to ftp lane only if there were any changes
+  # Switching to rambnroll lane only if there were any changes
   unless changelog_empty
     rambnroll(options)
 
     # Setting output message
-    @result = "#{@name} #{current_version}.#{current_build} (nightly) uploaded to FTP \nhttps://appdistribution.rambler.ru/nightly/index.html"
+    @result = "#{@name} #{current_version}.#{current_build} (nightly) uploaded to rambnroll \nhttps://appdistribution.rambler.ru"
   end
 end
 
