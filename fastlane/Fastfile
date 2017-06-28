@@ -287,8 +287,12 @@ private_lane :rambnroll_build_and_upload do |options|
 
   puts "APP_NAME #{options[:app_name]}" 
   puts "BRANCH #{options[:branch]}"
-  options[:ipa_path] = ipa_path 
-  rambnroll_upload(options)
+ 
+  rambnroll_upload(
+    app_name: options[:app_name],
+    branch: options[:branch],
+    ipa_path: ipa_path
+    )
 end
 
 desc "Prepares the build and uploads it to Fabric"
