@@ -2,8 +2,8 @@ module Fastlane
   module Actions
     class RambnrollUploadAction < Action
       def self.run(params)
-        puts "params" + "#{params}"
-        
+        puts "params.all_keys" + "#{params.all_keys}"
+        puts "available_options" + "#{params.available_options}"
         project_name = params[:app_name]
         folder = params[:branch]
         ipa_path = params[:ipa_path]
