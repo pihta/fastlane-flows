@@ -17,8 +17,9 @@ module Fastlane
                     :folder => folder,   
                     :build => Faraday::UploadIO.new(ipa_path, 'application/zip') }
 
-        UI.message "Rolling to Rambnroll(#{rambnroll_url}) 🤘"
+        UI.message "Rolling to Rambnroll hosted at #{rambnroll_url} 🤘"
         conn.post('/builds/webhook_upload', payload)
+        UI.message "Successfully uploaded to Rambnroll 🎉"
       end
 
       def self.description
