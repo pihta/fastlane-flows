@@ -278,6 +278,7 @@ private_lane :rambnroll_build_and_upload do |options|
   )
   ipa_path = lane_context[SharedValues::IPA_OUTPUT_PATH]
 
+  puts "options #{options}"
   rambnroll_upload(
     app_name: options[:app_name],
     branch: options[:branch],
