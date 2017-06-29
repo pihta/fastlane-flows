@@ -209,7 +209,6 @@ private_lane :rambnroll do |options|
   git_checkout(remote_branch: branch)
 
   # Build, Sigh and Upload
-  options[:app_name] = ENV['APP_NAME']
   rambnroll_build_and_upload(options)
 
   # Setup Oclint
