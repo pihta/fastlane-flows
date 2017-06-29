@@ -67,6 +67,7 @@ lane :nightly do |options|
   month = Date.today.month
   year = Date.today.year
   day = Date.today.day
+  current_tag = "nightly/#{year}/#{month}/#{day}"
   options[:tags] = ['nightly/latest', current_tag]
   puts(current_tag)
 
@@ -90,6 +91,7 @@ lane :nightly do |options|
 
   # Switching to rambnroll lane only if there were any changes
   unless changelog_empty
+    options[:is_nightly] = true
     rambnroll(options)
 
     # Setting output message
@@ -277,10 +279,12 @@ private_lane :rambnroll_build_and_upload do |options|
   )
   ipa_path = lane_context[SharedValues::IPA_OUTPUT_PATH]
 
+  branch = if options[:is_nightly] then "nightly" else options[:branch] end
+
   puts "options #{options}"
   rambnroll_upload(
     app_name: options[:app_name],
-    branch: options[:branch],
+    branch: branch,
     ipa_path: ipa_path
     )
 end
