@@ -225,7 +225,7 @@ private_lane :rambnroll do |options|
   #     ftp_user: ENV['FTP_USER'],
   #     ftp_password: ENV['FTP_PASSWORD']
   #   )
-  end
+  # end
 
   # Adding git tags
   tags = options[:tags]
