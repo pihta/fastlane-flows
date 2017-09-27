@@ -208,7 +208,7 @@ private_lane :rambnroll do |options|
   # git_reset unless options[:skip_reset]
 
   # Checking out the passed branch
-  git_checkout(remote_branch: branch)
+  # git_checkout(remote_branch: branch)
 
   # Build, Sigh and Upload
   rambnroll_build_and_upload(options)
