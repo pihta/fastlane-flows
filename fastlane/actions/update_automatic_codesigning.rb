@@ -39,7 +39,6 @@ module Fastlane
             project_attrs['TargetAttributes'][target_id] = {}
           end
           style = params[:use_automatic_signing] ? 'Automatic' : 'Manual'
-          UI.message("Changing signing for target #{target_id} to #{style}")
           project_attrs['TargetAttributes'][target_id]['ProvisioningStyle'] = style
         }
         project.root_object.attributes = project_attrs
