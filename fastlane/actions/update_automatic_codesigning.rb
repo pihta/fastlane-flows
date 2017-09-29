@@ -46,6 +46,7 @@ module Fastlane
         project.root_object.targets.each { |target|
           target.build_configurations.each { |config|
             config.build_settings['PROVISIONING_PROFILE_SPECIFIER'] = ""
+            config.build_settings['CODE_SIGN_STYLE'] = params[:use_automatic_signing] ? 'Automatic' : 'Manual'
             if swift_versions[target][config]
               config.build_settings['SWIFT_VERSION'] = swift_versions[target][config]
             end
