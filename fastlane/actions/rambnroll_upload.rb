@@ -5,7 +5,7 @@ module Fastlane
         project_name = params[:app_name]
         folder = params[:branch]
         ipa_path = params[:ipa_path]
-        UI.message()
+        UI.message "Upload params project:#{project_name} folder:#{folder} ipa:#{ipa_path}"
         rambnroll_url = 'https://appdistribution.rambler.ru'
         
         conn = Faraday.new(:url => rambnroll_url) do |faraday|
@@ -17,7 +17,6 @@ module Fastlane
         payload = { :project => project_name, 
                     :folder => folder,   
                     :build => Faraday::UploadIO.new(ipa_path, 'application/zip') }
-        UI.message("Upload params project:#{project_name} folder:#{folder} ipa:#{ipa_path}")
 
         UI.message "Rolling to Rambnroll hosted at #{rambnroll_url} 🤘"
         conn.post('/builds/webhook_upload', payload)
